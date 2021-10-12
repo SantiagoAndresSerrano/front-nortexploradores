@@ -1,0 +1,24 @@
+<app-header></app-header>
+<div class="glass">
+    <table class="table table-striped">
+        <thead>
+            <th style="text-align: center;">Reservas realizadas</th> 
+          <tr>
+            <th scope="col">#Reserva</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Estado</th>
+
+          </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let re of reservas">                
+                    <td>{{re.idReserva}}</td>
+                    <td>{{re.fecha}}</td>
+                    <td>{{re.estado}}</td>
+            </tr>
+
+        </tbody>
+      </table>
+</div>
+
+<app-footer></app-footer>

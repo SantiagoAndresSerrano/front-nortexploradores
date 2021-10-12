@@ -1,0 +1,72 @@
+<app-header></app-header>
+<div class="row">
+    <div class="col-2 col-s-0"></div>
+    <div class="col-6 col-s-5 glass form-pagos">
+    
+        <form (ngSubmit)="agregar()" [formGroup]="pagosForm">
+            
+            <div class="row pasajero-usuario">
+                <div class="mb-2 row">
+                    <div class="col-sm-2"></div>
+                    <h1 class="col-sm-4">Formulario de pago</h1>
+                
+                </div>
+                <div class="mb-2 row">
+                    <div class="col-sm-2"></div>
+                    <label class="col-sm-2 col-form-label">Paquete</label>
+                    <div class="col-sm-5">
+                      <select class="form-select" formControlName="paquetesControl" aria-label="Default select example">
+                        <option name="paquete" id="paq{{paquete.idPaq}}" *ngFor="let paquete of paquetes" value={{paquete.idPaq}}>Paquete
+                                {{paquete.tour.ruta.idMun.nombre}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+        
+        
+                <div class="mb-2 row">
+                    <div class="col-sm-2"></div>
+                    <label class="col-sm-2 col-form-label">Cantidad de pasajeros</label>
+                    <div class="col-sm-5">
+                        <select (change)="actualizar($event)" name="paquete" class="form-select" aria-label="Default select example">
+                            <option *ngFor="let i of maxPasajeros" value={{i}}>{{i}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+        
+        
+                <div class="mb-2 row">
+                    <div class="col-sm-2"></div>
+                    <label class="col-sm-2 col-form-label">Pasajeros que has llevado</label>
+                    <div  class="col-sm-5"  *ngIf="pasajerosFrec.length==0">No has llevado pasajeros antes!</div>
+                    <div class="col-sm-5" *ngIf="pasajerosFrec.length>0">
+                        <select name="pasajerosFrec" (onChange)="agregarPasajero($event)" class="form-select" aria-label="Default select example">
+                            <option *ngFor="let pasajero of pasajerosFrec" value={{pasajero.persona.idPersona}}>{{pasajero.persona.perNom}} {{pasajero.persona.perApell}} - {{pasajero.persona.idPersona}}</option>
+                        </select>
+                        
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                
+                <div id="listaPasajeros">
+        
+                    
+                </div>
+        
+        
+                <div class="mb-2 row">
+                    <div class="col-sm-4"></div>
+                    
+                    <!-- <button type="submit" class="btn btn-dark col-sm-4">Enviar</button> -->
+                    <div class="col-sm-2"></div>
+                </div>
+                
+            </div>
+        
+        </form>
+    </div>
+    <div class="col-2 col-s-0"></div>
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,30 @@
+<app-header></app-header>
+<div class="glass">
+    <table class="table table-striped">
+        <thead>
+            <th style="text-align: center;">Paquetes comprados</th> 
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Destino</th>
+            <th scope="col">Pasajeros</th>
+            <th scope="col">Total</th>
+            <th scope="col">Imgen</th>
+
+          </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let co of compras">                
+                    <td>{{co.paquete.idPaq}}</td>
+                    <td>{{co.paquete.descripcion}}</td>
+                    <td>{{co.paquete.tour.ruta.idMun.nombre}}</td>
+                    <td>{{co.cantidadPasajeros}}</td>
+                    <td>{{co.totalCompra}}</td>
+                    <td><img src="{{co.paquete.urlImagen}}" class="img-table"></td>
+            </tr>
+
+        </tbody>
+      </table>
+</div>
+
+<app-footer></app-footer>
