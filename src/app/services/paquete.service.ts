@@ -7,12 +7,16 @@ import { Observable } from 'rxjs';
 })
 export class PaqueteService {
 
-  uri="https://nortexploradores.herokuapp.com/paquete";
+  uri="http://localhost:8080/paquete";
 
   constructor(private http: HttpClient) { }
 
   public listar():Observable<any>{
     return this.http.get<any>(this.uri);
+  }
+
+  public encontrar(id:number):Observable<any>{
+    return this.http.get<any>(`${this.uri}/${id}`);
   }
   
 

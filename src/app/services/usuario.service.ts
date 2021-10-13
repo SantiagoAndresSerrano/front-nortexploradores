@@ -7,11 +7,15 @@ import { Observable } from 'rxjs';
 })
 export class UsuarioService {
 
-  url = "https://nortexploradores.herokuapp.com/usuario";
+  url = "http://localhost:8080/usuario";
   constructor(private http: HttpClient) { }
 
   public usuarioPorId(idUsuario:number):Observable<any>{
     return this.http.get<any>(`${this.url}/${idUsuario}`);
+  }
+
+  public usuarioPorUsername(username:string):Observable<any>{
+    return this.http.get<any>(`${this.url}/${username}/username`);
   }
 
   public paquetesPorUsuario(idUsuario:number):Observable<any>{

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TokenService } from '../services/token.service';
 import { UsuarioService } from '../services/usuario.service';
 
 @Component({
@@ -7,12 +8,27 @@ import { UsuarioService } from '../services/usuario.service';
 })
 export class ListarPaquetesComponent implements OnInit {
   compras: any = [];
-  idUsuario = 116; //el usuario con la sesion iniciada
-
-  constructor(private usuario: UsuarioService) {}
+  idUsuario!:number;
+  username!:string;
+  constructor(
+    private usuario: UsuarioService,
+    private token: TokenService
+    ) {}
 
   ngOnInit(): void {
-    this.cargarPaquetes();
+    this.username = this.token.getUserName();
+    console.log(this.username);
+    this.cargarUsuario();
+    
+  }
+
+  public cargarUsuario(){
+    console.log(this.username);
+    this.usuario.usuarioPorUsername(this.username).subscribe( usuario=>{
+      console.log(usuario);
+      this.idUsuario = usuario.id_Usuario;
+      this.cargarPaquetes();
+    });
   }
 
   public cargarPaquetes(){

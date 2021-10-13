@@ -24,8 +24,8 @@ import { UsuarioService } from './services/usuario.service';
 import { PersonaService } from './services/persona.service';
 import { TransaccionService } from './services/transaccion.service';
 import { PruebaComponent } from './prueba/prueba/prueba.component';
-
-
+import { PaqInterceptorService } from './interceptors/paq-interceptor.service';
+import { interceptorProvider } from './interceptors/paq-interceptor.service';
 @NgModule({
   declarations: [
     AppComponent, 
@@ -55,7 +55,9 @@ import { PruebaComponent } from './prueba/prueba/prueba.component';
     PaqueteService,
     UsuarioService,
     PersonaService,
-    TransaccionService
+    TransaccionService,
+    PaqInterceptorService,
+    interceptorProvider
   ],
   bootstrap: [AppComponent]
 })

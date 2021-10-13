@@ -9,18 +9,18 @@
             <th scope="col">Destino</th>
             <th scope="col">Pasajeros</th>
             <th scope="col">Total</th>
-            <th scope="col">Imgen</th>
+            <th scope="col">Imagen</th>
 
           </tr>
         </thead>
         <tbody>
             <tr *ngFor="let co of compras">                
-                    <td>{{co.paquete.idPaq}}</td>
-                    <td>{{co.paquete.descripcion}}</td>
-                    <td>{{co.paquete.tour.ruta.idMun.nombre}}</td>
-                    <td>{{co.cantidadPasajeros}}</td>
-                    <td>{{co.totalCompra}}</td>
-                    <td><img src="{{co.paquete.urlImagen}}" class="img-table"></td>
+                <td>{{co.idCompra}}</td>
+                <td>{{co.tour.paquete.descripcion}}</td>
+                <td>{{co.tour.ruta.idMun.nombre}}</td>
+                <td>{{co.cantidadPasajeros}}</td>
+                <td>{{co.totalCompra}}</td>
+                <img src="{{co.tour.paquete.urlImagen}}" class="img-table">
             </tr>
 
         </tbody>

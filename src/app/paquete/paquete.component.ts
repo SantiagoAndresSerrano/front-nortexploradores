@@ -10,7 +10,6 @@ export class PaqueteComponent implements OnInit {
   constructor(private paqueteService:PaqueteService) { }
 
   paquetes:any =[];
-  public url = window.location.href;
 
   ngOnInit(): void {
     this.listarPaquetes();

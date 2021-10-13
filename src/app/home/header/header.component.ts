@@ -9,6 +9,7 @@ import { UsuarioService } from '../../services/usuario.service';
 export class HeaderComponent implements OnInit {
   public usuarioLogin: any = [];
   public idUsuario!:number;
+  public isLogged!:boolean;
   
   public nombreUser!:string;
   constructor(
@@ -17,14 +18,19 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
-    this.nombreUser=this.tokenS.getUserName();
-    this.inicializarUsuario();
-    
+    this.nombreUser=this.tokenS.getUserName(); 
+    if (this.tokenS.getToken()) {
+      this.isLogged = true;
+    } else {
+      this.isLogged = false;
+    } 
   }
 
-
-
+  onLogOut(): void {
+    this.tokenS.logOut();
+    window.location.reload();
+    
+  }
 
   public inicializarUsuario() {
     this.usuarioSer

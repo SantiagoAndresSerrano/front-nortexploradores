@@ -45,9 +45,39 @@ body {
 }
 
 .img-table{
-  width: 100px;
-  height: 70px;
+  width: 120px;
+  height: 75px;
   backdrop-filter: blur(6px);
-  border-radius: 10px;
+  border-radius: 8px;
   box-shadow: 0 8px 32px 0 rgba(242, 240, 243, 0.37);
+}
+
+.PAGADO{
+  text-align: center;
+  padding: 5px;
+  width: 120px;
+  height: 35px;
+  background-color: rgba(18, 199, 18, 0.801);
+  box-shadow: 0 8px 32px 0 rgba(43, 211, 21, 0.835);
+  border-radius: 20px;
+}
+
+.PENDIENTE{
+  text-align: center;
+  padding: 5px;
+  width: 120px;
+  height: 35px;
+  background-color: rgba(221, 141, 13, 0.801);
+  box-shadow: 0 8px 32px 0 rgba(211, 144, 21, 0.835);
+  border-radius: 20px;
+}
+
+.CANCELADO{
+  text-align: center;
+  padding: 5px;
+  width: 120px;
+  height: 35px;
+  background-color: rgb(216, 74, 39, 0.801);
+  box-shadow: 0 8px 32px 0 rgba(168, 26, 7, 0.835);
+  border-radius: 20px;
 }

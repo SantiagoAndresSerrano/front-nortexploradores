@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ReservaService {
 
-  uri = "https://nortexploradores.herokuapp.com/reserva";
+  uri = "http://localhost:8080/reserva";
 
   constructor(private http:HttpClient) { }
 

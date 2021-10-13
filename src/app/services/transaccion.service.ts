@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class TransaccionService {
 
-  uri="https://nortexploradores.herokuapp.com/transaccion";
+  uri="http://localhost:8080/transaccion";
 
   constructor(private http: HttpClient) { }
 

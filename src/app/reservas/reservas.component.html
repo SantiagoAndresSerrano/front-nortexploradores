@@ -14,7 +14,7 @@
             <tr *ngFor="let re of reservas">                
                     <td>{{re.idReserva}}</td>
                     <td>{{re.fecha}}</td>
-                    <td>{{re.estado}}</td>
+                    <td><div class="{{re.estado}}">{{re.estado}}</div></td>
             </tr>
 
         </tbody>
