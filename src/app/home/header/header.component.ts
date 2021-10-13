@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from '../services/usuario/usuario.service';
+import { TokenService } from 'src/app/services/token.service';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-header',
@@ -7,20 +8,25 @@ import { UsuarioService } from '../services/usuario/usuario.service';
 })
 export class HeaderComponent implements OnInit {
   public usuarioLogin: any = [];
-  public idUsuario = 116;
+  public idUsuario!:number;
+  
+  public nombreUser!:string;
   constructor(
-    private usuarioSer: UsuarioService
+    private usuarioSer: UsuarioService,
+    private tokenS: TokenService
   ) {}
 
   ngOnInit(): void {
+
+    this.nombreUser=this.tokenS.getUserName();
     this.inicializarUsuario();
+    
   }
 
 
 
 
   public inicializarUsuario() {
-
     this.usuarioSer
       .usuarioPorId(this.idUsuario)
       .subscribe((usuario) => {

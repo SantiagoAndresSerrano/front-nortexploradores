@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PaqueteService } from 'src/app/services/paquete/paquete.service';
-import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { PaqueteService } from 'src/app/services/paquete.service';
+import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
   selector: 'app-form-pagos',

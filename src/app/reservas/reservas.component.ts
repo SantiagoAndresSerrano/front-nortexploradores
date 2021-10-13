@@ -1,7 +1,7 @@
 import { ThrowStmt } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { ReservaService } from '../services/reserva/reserva.service';
-import { UsuarioService } from '../services/usuario/usuario.service';
+import { ReservaService } from '../services/reserva.service';
+import { UsuarioService } from '../services/usuario.service';
 
 @Component({
   selector: 'app-reservas',
