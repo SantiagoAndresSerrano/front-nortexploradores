@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginUsuario } from 'src/app/models/login-usuario';
 import { AuthService } from 'src/app/services/auth.service';
-import { InformacionService } from 'src/app/services/informacion.service';
 import { TokenService } from 'src/app/services/token.service';
 // import { ToastrService } from 'ngx-toastr';
 @Component({
@@ -11,7 +10,6 @@ import { TokenService } from 'src/app/services/token.service';
   styleUrls: ['./auth-login.component.css']
 })
 export class AuthLoginComponent implements OnInit {
-  @Input() dataEntrante:any;
   isLogged = false;
   isLoginFail = false;
   loginUsuario!: LoginUsuario;
@@ -24,7 +22,6 @@ export class AuthLoginComponent implements OnInit {
     private tokenService: TokenService,
     private authService: AuthService,
     private router: Router,
-    private informacion: InformacionService
     // private toastr:ToastrService
   ) { }
 
@@ -34,10 +31,6 @@ export class AuthLoginComponent implements OnInit {
       this.isLogged = true;
       this.isLoginFail = false;
       this.roles = this.tokenService.getAuthorities();
-      this.dataEntrante = this.nombreUsuario;
-      this.informacion.disparador.emit({
-        data:this.dataEntrante
-      })
     }
   }
 

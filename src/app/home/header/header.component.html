@@ -3,18 +3,18 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="http://localhost:4200/inicio">Inicio</a>
+            <a class="nav-link active" aria-current="page" href="{{url_front}}/inicio">Inicio</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="http://localhost:4200/paquetes">Paquetes</a>
+            <a class="nav-link" id="nav-paquetes" href="{{url_front}}/paquetes">Paquetes</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <li class="nav-item dropdown" *ngIf="isLogged">
+            <a class="nav-link dropdown-toggle" id="nav-misviajes"  href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Mis viajes
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="http://localhost:4200/misPaquetes">Comprados</a></li>
-              <li><a class="dropdown-item" href="http://localhost:4200/reservas">Reservas</a></li>
+              <li><a class="dropdown-item" href="{{url_front}}/misPaquetes">Comprados</a></li>
+              <li><a class="dropdown-item" href="{{url_front}}/reservas">Reservas</a></li>
               <!-- <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="#">Something else here</a></li> -->
             </ul>
@@ -23,10 +23,10 @@
             <a class="nav-link">{{nombreUser}}</a>
           </li>
           <li class="nav-item" *ngIf="!isLogged">
-            <a class="nav-link" href="http://localhost:4200/login">Login</a>
+            <a class="nav-link" href="{{url_front}}/login">Iniciar sesión</a>
           </li>
           <li class="nav-item me-2" *ngIf="isLogged">
-            <a class="nav-link" (click)="onLogOut()" href="">Logout</a>
+            <a class="nav-link" (click)="onLogOut()" href="">Cerrar sesión</a>
           </li>
         </ul>
       </div>

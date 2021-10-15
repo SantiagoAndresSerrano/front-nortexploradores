@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { JwtDto } from '../models/jwt-dto';
 import { LoginUsuario } from '../models/login-usuario';
 import { NuevoUsuario } from '../models/nuevo-usuario';
-
+import * as global from 'global'
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ import { NuevoUsuario } from '../models/nuevo-usuario';
 export class AuthService {
   
 
-  authURL = 'http://localhost:8080/auth/';
+  authURL = `${global.url}/auth/`;
 
   constructor(private httpClient: HttpClient) { }
 

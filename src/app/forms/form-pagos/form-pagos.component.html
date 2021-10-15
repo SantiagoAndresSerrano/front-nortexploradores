@@ -16,8 +16,8 @@
                     <label class="col-sm-2 col-form-label">Paquete</label>
                     <div class="col-sm-5">
                       <select class="form-select" formControlName="paquetesControl" aria-label="Default select example">
-                        <option name="paquete" id="paq{{paquete.idPaq}}" *ngFor="let paquete of paquetes" value={{paquete.idPaq}}>Paquete
-                                {{paquete.tour.ruta.idMun.nombre}}</option>
+                        <option name="paquete" id="paq{{paquete.idPaq}}" *ngFor="let paquete of paquetes" value={{paquete.idPaq}}>
+                                {{paquete.nombre}}</option>
                         </select>
                     </div>
                     <div class="col-sm-3"></div>
@@ -50,7 +50,6 @@
                 </div>
                 
                 <div id="listaPasajeros">
-        
                     
                 </div>
         

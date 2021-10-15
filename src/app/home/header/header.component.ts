@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TokenService } from 'src/app/services/token.service';
 import { UsuarioService } from '../../services/usuario.service';
+import * as global from 'global'
 
 @Component({
   selector: 'app-header',
@@ -10,6 +11,8 @@ export class HeaderComponent implements OnInit {
   public usuarioLogin: any = [];
   public idUsuario!:number;
   public isLogged!:boolean;
+  public seleccionado!:string;
+  public url_front!:string;
   
   public nombreUser!:string;
   constructor(
@@ -19,6 +22,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.nombreUser=this.tokenS.getUserName(); 
+    this.url_front = global.url_front;
     if (this.tokenS.getToken()) {
       this.isLogged = true;
     } else {
@@ -30,6 +34,10 @@ export class HeaderComponent implements OnInit {
     this.tokenS.logOut();
     window.location.reload();
     
+  }
+
+  public cambiarSeleccionado(){
+
   }
 
   public inicializarUsuario() {
