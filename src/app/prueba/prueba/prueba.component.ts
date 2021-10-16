@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { EmpresaService } from 'src/app/services/empresa.service';
 
 @Component({
   selector: 'app-prueba',
@@ -6,9 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PruebaComponent implements OnInit {
 
-  constructor() { }
+  empresas:any= [];
+
+  constructor(private empresaService:EmpresaService) { }
 
   ngOnInit(): void {
+    this.cargarEmpresas();
+  }
+
+  public cargarEmpresas(){
+    this.empresaService.listarEmpresa().subscribe(empresas=>{
+      this.empresas=empresas;
+    })
   }
 
 }

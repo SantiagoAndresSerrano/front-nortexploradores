@@ -22,7 +22,8 @@ const routes: Routes = [
   {path:'payu',component:PayuComponent},
   {path: 'tabla', component:PruebaComponent},
   {path:'login', component:AuthLoginComponent },
-  {path:'registro', component:RegistroComponent}
+  {path:'registro', component:RegistroComponent},
+  {path:'prueba', component:PruebaComponent}
 ];
 
 @NgModule({

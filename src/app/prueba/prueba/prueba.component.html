@@ -1,4 +1,11 @@
-<table
+
+<app-header></app-header>
+
+<div *ngFor="let empresa of empresas">
+  <p>{{empresa.nombre}}</p>
+</div>
+
+<!-- <table
   align="center"
   border="4"
   bordercolor="purple"
@@ -42,4 +49,4 @@
     <td>Karate</td>
     <td>Karate</td>
   </tr>
-</table>
+</table> -->
