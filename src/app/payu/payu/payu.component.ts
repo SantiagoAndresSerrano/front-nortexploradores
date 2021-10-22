@@ -19,7 +19,7 @@ export class PayuComponent implements OnInit {
   nombrePersona = "Genesis";
   idUsuario = "116";
 
-  url = `http://29d3-186-99-34-124.ngrok.io/pagos/confirmacion`;
+  url = `https://nortexploradores.herokuapp.com/pagos/confirmacion`;
 
   total = 80000;
   

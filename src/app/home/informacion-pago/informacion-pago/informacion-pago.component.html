@@ -1,0 +1,28 @@
+<app-header></app-header>
+
+<div class="glass">
+    <div class="row">
+        <div class="col-8"></div>
+        <table class="table table-striped col-md-8">
+            <thead>
+            </thead>
+            <tbody>
+                <tr scope="col" *ngFor="let item of infoTransaccion">
+                    <td>{{item}}</td>
+                </tr>
+    
+                <!-- <tr *ngFor="let info of infoTransaccion">                
+                        <td>{{re.idReserva}}</td>
+                        <td>{{re.fecha}}</td>
+                        <td><div class="{{re.estado}}">{{re.estado}}</div></td>
+                </tr> -->
+    
+            </tbody>
+          </table>
+        <div class="col-8"></div>
+
+    </div>
+
+</div>
+
+<app-footer></app-footer>

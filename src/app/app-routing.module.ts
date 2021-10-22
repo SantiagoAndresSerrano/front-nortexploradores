@@ -4,6 +4,7 @@ import { AuthLoginComponent } from './auth/auth-login/auth-login.component';
 import { FormPagosComponent } from './forms/form-pagos/form-pagos.component';
 import { LoginComponent } from './forms/login/login.component';
 import { RegistroComponent } from './forms/registro/registro.component';
+import { InformacionPagoComponent } from './home/informacion-pago/informacion-pago/informacion-pago.component';
 import { InicioComponent } from './home/inicio/inicio.component';
 import { ListarPaquetesComponent } from './listar-paquetes/listar-paquetes.component';
 import { PaqueteComponent } from './paquete/paquete.component';
@@ -23,7 +24,9 @@ const routes: Routes = [
   {path: 'tabla', component:PruebaComponent},
   {path:'login', component:AuthLoginComponent },
   {path:'registro', component:RegistroComponent},
-  {path:'prueba', component:PruebaComponent}
+  {path:'prueba', component:PruebaComponent},
+  {path:'infpagos', component:InformacionPagoComponent},
+
 ];
 
 @NgModule({

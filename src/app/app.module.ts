@@ -26,6 +26,7 @@ import { TransaccionService } from './services/transaccion.service';
 import { PruebaComponent } from './prueba/prueba/prueba.component';
 import { PaqInterceptorService } from './interceptors/paq-interceptor.service';
 import { interceptorProvider } from './interceptors/paq-interceptor.service';
+import { InformacionPagoComponent } from './home/informacion-pago/informacion-pago/informacion-pago.component';
 @NgModule({
   declarations: [
     AppComponent, 
@@ -41,7 +42,8 @@ import { interceptorProvider } from './interceptors/paq-interceptor.service';
     ReservasComponent,
     PruebaComponent,
     AuthRegistroComponent,
-    AuthLoginComponent
+    AuthLoginComponent,
+    InformacionPagoComponent
   ],
   imports: [
     BrowserModule,
