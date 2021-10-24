@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaqueteService } from 'src/app/services/paquete.service';
+import { PersonaService } from 'src/app/services/persona.service';
+import { TipoidService } from 'src/app/services/tipoid.service';
+import { TokenService } from 'src/app/services/token.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
@@ -9,35 +12,103 @@ import { UsuarioService } from 'src/app/services/usuario.service';
   templateUrl: './form-pagos.component.html',
 })
 export class FormPagosComponent implements OnInit {
-
-
-  public idUsuario = 116; // Supuestamente el usuario de la sesion
+  pagosInfo! : FormGroup;
   public paquetes:any = [];
-  public total:number= 5; //Total pasajeros
-  public maxPasajeros:number[] = [];
+  public total = 0;
   public pasajerosFrec: any=[];
-  public publiclistaPasajeros:any;
+  public tipoId :any= [];
+  public pasajerosFrecElegidos : any = [];
   public idPaquete:any;
-  
-  public totalPasajeros = 0;
+
+  public usuario:any;
+  public isLogged!:boolean;
   public pagosForm!: FormGroup;
+  
+  public nombreUser!:string;
+
   constructor(
     private paqueteService:PaqueteService,
     private usuarioService:UsuarioService,
+    private tipoIdService:TipoidService,
+    private personaService: PersonaService,
     private route: ActivatedRoute,
-    private fb: FormBuilder    
+    private fb: FormBuilder,
+    private tokenS: TokenService,
+    private formBuilder : FormBuilder
     ){}
 
   ngOnInit(): void {
+    this.nombreUser = this.tokenS.getUserName();
+    this.cargarUsuario();
     this.agregarPaquetes();
-    this.cargarTotalPasajeros();
-    this.agregarPasajerosFrec();
+    this.cargarToken();
+    this.pagosInfo = this.formBuilder.group({
+      paquete : [],
+      total : [],
+      pasajeros : this.formBuilder.array([])
+    })
+    this.tipoIdService.getTipoId().subscribe(ids=>{
+      this.tipoId = ids
+    })
     this.idPaquete = this.route.snapshot.paramMap.get("idPaq");
+
+
     if(this.idPaquete ==null) this.idPaquete="paq-1";
-    this.pagosForm = this.fb.group(
-      {paquetesControl:this.idPaquete}
+
+
+  }
+
+  get pasajerosDeGrupos () {
+    return this.pagosInfo.get('pasajeros') as FormArray
+  }
+
+  agregarPasajero(tipoid = "", documento = "", nombre="", apellido="", sexo="", fechaNac="", celular="",correo=""){
+    this.total++;
+    let pasajeros = this.pagosInfo.get('pasajeros') as FormArray;
     
-    );
+    pasajeros.push(this.formBuilder.group({
+      idTipo : [tipoid, [Validators.required]],
+      idPersona : [documento, [Validators.required]],
+      nombre : [nombre, [Validators.required]],
+      apellido : [apellido, [Validators.required]],
+      sexo : [sexo, [Validators.required]],
+      fechaNac : [fechaNac, [Validators.required]],
+      cel : [celular, [Validators.required]],
+      correo : [correo, [Validators.required]],
+    }));
+  }
+
+  eliminarPasajero(i:number){
+    let pasajeros = this.pagosInfo.get('pasajeros') as FormArray;
+    this.total--;
+    pasajeros.removeAt(i);
+  }
+
+  createpagosInfo(){
+    console.log('data is ', this.pagosInfo.value.pasajeros);
+
+    let pasajeros = this.pagosInfo.value.pasajeros;
+
+    //Falta agregar estos pasajeros y hacer una peticion al backend de compra, toca calcular el precio total dependiendo si es niño y tales, tambien recordar la relacion muchos a muchos con compra, 
+
+    // Revisar bien los atributos que voy a mandar.
+
+    this.pagosInfo.markAllAsTouched();
+  }
+
+  cargarUsuario(){
+    this.usuarioService.usuarioPorUsername(this.nombreUser).subscribe(usuario=>{
+      this.usuario=usuario;
+      this.agregarPasajerosFrec();
+    })
+  }
+
+  public cargarToken(){
+    if (this.tokenS.getToken()) {
+      this.isLogged = true;
+    } else {
+      this.isLogged = false;
+    } 
   }
 
   public agregarPaquetes(){
@@ -47,152 +118,50 @@ export class FormPagosComponent implements OnInit {
   }
 
   public agregarPasajerosFrec(){
-    this.usuarioService.clientesPorUsuario(this.idUsuario).subscribe(pasajeros=>{
+    this.usuarioService.clientesPorUsuario(this.usuario.id_Usuario).subscribe(pasajeros=>{
       this.pasajerosFrec = pasajeros; 
     })
   }
 
-  public cargarTotalPasajeros(){
-    for (let i = 0; i <= this.total; i++) {
-      this.maxPasajeros.push(i)
-      
+  public actualizarPasajeros(event:any){ //metodo para agregar un pasajero o eliminarlo si se vuelve a seleccionar
+    let pasajeros = this.pagosInfo.get('pasajeros') as FormArray;
+    
+    console.log(pasajeros.value);
+    let cedula = event.target.value;
+    let yaResgistrado = false;
+    let posEliminar = -1 //posicion del pasajero que se encontro y se va a eliminar.
+    for (let i = 0; i < pasajeros.length; i++) {
+      if(pasajeros.at(i).value.documento == cedula ){
+        yaResgistrado = true;
+        posEliminar = i; // la posicion que eliminare del form builder
+        break;
+      }
     }
-  }
-
-  public eliminarHijos(document:any){
-    document?.childNodes.forEach((node: any)=>{
-      document?.removeChild(node);
-    })
-  }
-
-  public agregarPasajero(pasajero:any){
-    this.totalPasajeros++;
-
-  }
-
-  public actualizar(total:any){
     
-    var totalV:number = +total.target.value
-    this.total+=totalV;
-
-    var plantilla = document.createElement("div");
-    var doc = document.getElementById("listaPasajeros");
-    var child = document.createElement("div");
-    this.eliminarHijos(doc);
-    
-
-    for (let i = 0; i < totalV; i++) {
-      
-      child.innerHTML+=
-      document.createElement("div")
-      .innerHTML=
-      `<div class="row pasajero-usuario" id="pasajero">
-      <div class="mb-2 row">
-          <h4 style="color:red" class="col-sm-2 col-form-label">Pasajero ${i+1}</h4>
-      </div>
-      
-      <div class="mb-2 row">
-          <div class="col-sm-2"></div>
-          <label class="col-sm-2 col-form-label">Nombre</label>
-          <div class="col-sm-5">
-              <input type="text" name="" class="form-control" placeholder="Ingresa tu nombre">
-          </div>
-          <div class="col-sm-3"></div>
-      </div>
-
-      <div class="mb-2 row">
-          <div class="col-sm-2"></div>
-          <label class="col-sm-2 col-form-label">Apellidos</label>
-          <div class="col-sm-5">
-              <input type="text" class="form-control" placeholder="Ingresa tu nombre">
-          </div>
-          <div class="col-sm-3"></div>
-      </div>
-      <div class="mb-2 row">
-          <div class="col-sm-2"></div>
-          <label class="col-sm-2 col-form-label">Documento</label>
-          <div class="col-sm-5">
-              <input type="email" class="form-control" placeholder="Ingresa tu documento">
-          </div>
-          <div class="col-sm-3"></div>
-      </div>
-      </div>`
-      plantilla.appendChild(child); 
+    if(yaResgistrado){
+      pasajeros.removeAt(posEliminar);
+      this.total--;
+    }else{
+      //busco a la persona y cargo sus datos en el form.
+      this.total++;
+      this.personaService.getPersona(cedula).subscribe(persona=>{
+        console.log(persona);
+        pasajeros = this.pagosInfo.get('pasajeros') as FormArray;
+        
+        pasajeros.push(this.formBuilder.group({
+          idTipo : [persona.idTipo.idTipo, [Validators.required]],
+          idPersona : [persona.idPersona, [Validators.required]],
+          nombre : [persona.nombre, [Validators.required]],
+          apellido : [persona.apellido, [Validators.required]],
+          sexo : [persona.sexo, [Validators.required]],
+          fechaNac : [persona.fechaNac, [Validators.required]],
+          cel : [persona.cel, [Validators.required]],
+          correo : [persona.correo, [Validators.required]],
+        }));
+      })
     }
-    doc?.appendChild(plantilla);
+    console.log(pasajeros.value);
   }
 
-  public agregar():void{
-    
-  }
 }
 
-
-// `<div class="row pasajero-usuario" id="pasajero">
-//       <div class="mb-2 row">
-//           <h4 style="color:red" class="col-sm-2 col-form-label">Pasajero ${i+1}</h4>
-//       </div>
-      
-//       <div class="mb-2 row">
-//           <div class="col-sm-2"></div>
-//           <label class="col-sm-2 col-form-label">Nombre</label>
-//           <div class="col-sm-5">
-//               <input type="text" name="" class="form-control" placeholder="Ingresa tu nombre">
-//           </div>
-//           <div class="col-sm-3"></div>
-//       </div>
-
-//       <div class="mb-2 row">
-//           <div class="col-sm-2"></div>
-//           <label class="col-sm-2 col-form-label">Apellidos</label>
-//           <div class="col-sm-5">
-//               <input type="text" class="form-control" placeholder="Ingresa tu nombre">
-//           </div>
-//           <div class="col-sm-3"></div>
-//       </div>
-
-//       <div class="mb-2 row">
-//           <div class="col-sm-2"></div>
-//           <label class="col-sm-2 col-form-label">Fecha nacimiento</label>
-//           <div class="col-sm-5">
-//               <input type="text" class="form-control" placeholder="Ingresa tu fecha">
-//           </div>
-//           <div class="col-sm-3"></div>
-//       </div>
-
-//       <div class="mb-2 row">
-//           <div class="col-sm-2"></div>
-//           <label class="col-sm-2 col-form-label">Sexo</label>
-//           <div class="col-sm-5">
-//               <input type="text" class="form-control" placeholder="Ingresa tu sexo">
-//           </div>
-//           <div class="col-sm-3"></div>
-//       </div>
-
-//       <div class="mb-2 row">
-//           <div class="col-sm-2"></div>
-//           <label class="col-sm-2 col-form-label">Email</label>
-//           <div class="col-sm-5">
-//               <input type="email" class="form-control" placeholder="Ingresa tu email">
-//           </div>
-//           <div class="col-sm-3"></div>
-//       </div>
-
-//       <div class="mb-2 row">
-//           <div class="col-sm-2"></div>
-//           <label class="col-sm-2 col-form-label">Número de telefono</label>
-//           <div class="col-sm-5">
-//               <input type="number" class="form-control" placeholder="Ingresa tu numero de telefono">
-//           </div>
-//           <div class="col-sm-3"></div>
-//       </div>
-
-//       <div class="mb-2 row">
-//           <div class="col-sm-2"></div>
-//           <label class="col-sm-2 col-form-label">Direccion</label>
-//           <div class="col-sm-5">
-//               <input type="email" class="form-control" placeholder="Ingresa tu Direccion">
-//           </div>
-//           <div class="col-sm-3"></div>
-//       </div>
-//       </div>`

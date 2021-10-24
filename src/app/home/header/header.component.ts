@@ -8,8 +8,9 @@ import * as global from 'global'
   templateUrl: './header.component.html',
 })
 export class HeaderComponent implements OnInit {
-  public usuarioLogin: any = [];
+  public usuarioLogin: any;
   public idUsuario!:number;
+  public usuario:any;
   public isLogged!:boolean;
   public seleccionado!:string;
   public url_front!:string;
@@ -22,6 +23,8 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.nombreUser=this.tokenS.getUserName(); 
+    this.cargarUsuario();
+
     this.url_front = global.url_front;
     if (this.tokenS.getToken()) {
       this.isLogged = true;
@@ -34,6 +37,12 @@ export class HeaderComponent implements OnInit {
     this.tokenS.logOut();
     window.location.reload();
     
+  }
+
+  cargarUsuario(){
+    this.usuarioSer.usuarioPorUsername(this.nombreUser).subscribe(usuario=>{
+      this.usuario=usuario;
+    })
   }
 
   public cambiarSeleccionado(){

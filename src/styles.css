@@ -7,7 +7,7 @@ body {
 
 .glass {
   padding: 10px;
-  background: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.993);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -20,7 +20,7 @@ body {
 .form-pagos{
 
     padding: 50px;
-    max-width: 800px;
+    margin: 20px;
 }
 
 .img-paquete{
@@ -80,4 +80,44 @@ body {
   background-color: rgb(216, 74, 39, 0.801);
   box-shadow: 0 8px 32px 0 rgba(168, 26, 7, 0.835);
   border-radius: 20px;
+}
+
+.pasajero-usuario{
+  background-color: rgba(255, 255, 255, 0.801);
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+/* CSS */
+.button-34 {
+  background: #5E5DF0;
+  border-radius: 999px;
+  box-shadow: #5E5DF0 0 10px 20px -10px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  opacity: 1;
+  outline: 0 solid transparent;
+  padding: 8px 18px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  word-break: break-word;
+  border: 0;
+}
+.red{
+  background: #fa1212;
+  border-radius: 999px;
+  box-shadow: #ca3305 0 10px 20px -10px;
+}
+
+.black{
+  background: #030303;
+  border-radius: 999px;
+  color: #FFFFFF;
 }
