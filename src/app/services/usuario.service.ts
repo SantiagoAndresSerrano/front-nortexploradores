@@ -30,4 +30,9 @@ export class UsuarioService {
   public clientesPorUsuario(idUsuario:number):Observable<any>{
     return this.http.get<any>(`${this.url}/${idUsuario}/pasajeros`);
   }
+
+  public guardarPasajerosDeUsuario(idUsuario:number, pasajeros:any[]):Observable<any>{
+    return this.http.post<any>(`${this.url}/${idUsuario}/pasajeros`,pasajeros);
+  }
+
 }

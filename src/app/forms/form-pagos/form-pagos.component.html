@@ -1,228 +1,228 @@
 <app-header></app-header>
-<div class="glass form-pagos">
+<!-- Pagina 1 -->
+<div class="glass form-pagos" *ngIf="infoPagina==1">
+  <div class="row">
+    <h1>Formulario de pago</h1>
 
+    <div class="mb-2 row" *ngIf="pasajerosFrecElegidos.length!=0">
+      <table class="table table-striped">
+        <div class="col-sm-2"></div>
+        <thead>
+          <th style="text-align: center;">Pasajeros seleccionados</th>
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Identificacion</th>
+            <th scope="col">Accion</th>
+          </tr>
+        </thead>
+        <tbody>
 
-        <div class="row">
-            <h1>Formulario de pago</h1>
+        </tbody>
+      </table>
+    </div>
 
-            <div class="mb-2 row" *ngIf="pasajerosFrecElegidos.length!=0">
-                <table class="table table-striped">
-                    <div class="col-sm-2"></div>
-                    <thead>
-                        <th style="text-align: center;">Pasajeros seleccionados</th>
-                        <tr>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Apellido</th>
-                            <th scope="col">Identificacion</th>
-                            <th scope="col">Accion</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <form [formGroup]="pagosInfo" #form>
+          <div class="row g-3">
+            <div class="col-sm-6">
+              <label for="firstName" class="form-label">Paquete</label>
+              <select class="form-select" formControlName="paquete" (change)="cargarTour($event)" aria-label="Default select example">
+                <option name="paquete" id="paq{{tour.paquete.idPaq}}" *ngFor="let tour of tours"
+                  value={{tour.idTour}}>
+                  {{tour.paquete.nombre}} [{{tour.fechaSalida}}] --> [{{tour.fechaLlegada}}] </option>
+              </select>
             </div>
 
-            <div class="row">
-                <div class="col-md-12 col-lg-12">
-                  <form [formGroup]="pagosInfo" #form (ngSubmit)=createpagosInfo()>
-                    <div class="row g-3">
-                      <div class="col-sm-6">
-                        <label for="firstName" class="form-label">Paquete</label>
-                        <select class="form-select" formControlName="paquete" aria-label="Default select example">
-                            <option name="paquete" id="paq{{paquete.idPaq}}" *ngFor="let paquete of paquetes"
-                                value={{paquete.idPaq}}>
-                                {{paquete.nombre}}</option>
-                        </select>
-                      </div>
-          
-                      <div class="col-sm-6">
-                        <label for="lastName" class="form-label">Cantidad de pasajeros [</label>
-                        <code>{{total}}</code>]
-                      </div>
-          
-                    </div>
-                    <hr>
-                    <div class="col-sm-6">
-                        <label for="firstName" class="form-label">Pasajeros que has llevado antes</label>
-                        <select class="form-select" (change)="actualizarPasajeros($event)" formControlName="paquete" aria-label="Default select example">
-                            <option name="paquete" id="paq{{pasajero.idPasajero}}" *ngFor="let pasajero of pasajerosFrec"
-                                value={{pasajero.persona.idPersona}}> {{pasajero.persona.nombre}} {{pasajero.persona.apellido}} - {{pasajero.persona.idPersona}}
-                            </option>
-                        </select>
-                      </div>
-          
-                    <div class="card mt-2r pasajero-usuario" style="margin-top: 20px;margin-bottom: 20px;" >
-                      <div class="card-header" >
-                        <div class="header-container">
-                          <span class="product-header">
-                            Agregar pasajeros
-                          </span>
-                          <button (click)="agregarPasajero()" class="button-34 black">
-                            Agregar
-                          </button>
-                        </div>
-          
-          
-                      </div>
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col-12">
-          
-                            <ul class="list-group">
-                              <li class="list-group-item" formArrayName="pasajeros" *ngFor="let product of pasajerosDeGrupos.controls; let i = index;" style="margin-bottom: 20px;">
-                                <div [formGroupName]="i" class="row">  
-                                      <div class="mb-2 row">
-                                        <h4 class="col-sm-10 col-form-label">Pasajero {{i}}</h4>
-                                        <h4 class="col-sm-2"><button (click)="eliminarPasajero(i)" class="button-34 red">Eliminar</button></h4>
-                                    </div>
-                                    
-                                    <div class="mb-2 row">
-                                        <label class="col-sm-4 col-form-label">Identificación</label>
-                                        <div class="col-sm-8">
-                                            <input type="number" formControlName="idPersona" name="" class="form-control" placeholder="Ingresa tu identificacion" required>
-                                        </div>
-                                    </div>
-                        
-                                    <div class="mb-2 row">
-                                        <label class="col-sm-4 col-form-label">Tipo de id</label>
-                                        <div class="col-sm-8">
-                                            <select value="" class="form-select" formControlName="idTipo" required>
-                                                <option name="" id="" *ngFor="let id of tipoId" value="{{id.idTipo}}">{{id.tipo}}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                        
-                                    <div class="mb-2 row">
-                                        <label class="col-sm-4 col-form-label">Nombre</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" name="" formControlName="nombre" required class="form-control" placeholder="Ingresa tu nombre">
-                                        </div>
-                                    </div>
-                        
-                                    <div class="mb-2 row">
-                                        <label class="col-sm-4 col-form-label">Apellidos</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" formControlName="apellido"  required class="form-control" placeholder="Ingresa tus apellidos">
-                                        </div>
-                                    </div>
-         
-                                    <div class="mb-2 row">
-                                        <label class="col-sm-4 col-form-label">Sexo</label>
-                                        <div class="col-sm-8">
-                                            <input type="email" formControlName="sexo" required class="form-control" placeholder="Ingresa tu documento">
-                                        </div>
-                                    </div>
-                        
-                                    <div class="mb-2 row">
-                                        <label class="col-sm-4 col-form-label">Fecha nacimiento</label>
-                                        <div class="col-sm-8">
-                                            <input type="date" formControlName="fechaNac" required class="form-control">
-                                        </div>
-                                    </div>
-                        
-                                    <div class="mb-2 row">
-                                        <label class="col-sm-4 col-form-label">Celular</label>
-                                        <div class="col-sm-8">
-                                            <input type="number" formControlName="cel" class="form-control">
-                                        </div>
-                                    </div>
-                        
-                                    <div class="mb-2 row">
-                                        <label class="col-sm-4 col-form-label">Correo</label>
-                                        <div class="col-sm-8">
-                                            <input type="email"  formControlName="correo" class="form-control" style="margin-bottom: 10px;">
-                                        </div>
-                                    </div>
-                        
-                                    <input type="hidden" value="1" class="form-control">
-                                </div>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <button type="submit" onclick="form.submit()" class="mt-20 w-100 btn-lg button-34" type="button">Guardar datos</button>
-                  </form>
-                </div>
+            <div class="col-sm-3">
+              <label for="lastName" class="form-label">Cantidad de pasajeros [</label>
+              <code>{{total}}</code>]
+            </div>
+            <div class="col-sm-3" *ngIf="tourSeleccionado!=undefined">
+              <label for="lastName" class="form-label">Cupos disponibles</label>
+              [<code id="cantidadCupos"></code>]
+            </div>
+          </div>
+          <hr>
+          <div class="col-sm-6">
+            <label for="firstName" class="form-label">Pasajeros que has llevado antes</label>
+            <select class="form-select" (change)="actualizarPasajeros($event)" formControlName="paquete"
+              aria-label="Default select example">
+              <option name="paquete" id="paq{{pasajero.idPasajero}}" *ngFor="let pasajero of pasajerosFrec"
+                value={{pasajero.persona.idPersona}}> {{pasajero.persona.nombre}} {{pasajero.persona.apellido}} -
+                {{pasajero.persona.idPersona}}
+              </option>
+            </select>
+          </div>
+
+          <div class="card mt-2r pasajero-usuario" style="margin-top: 20px;margin-bottom: 20px;">
+            <div class="card-header">
+              <div class="header-container">
+                <span class="product-header">
+                  Agregar pasajeros
+                </span>
+                <button (click)="agregarPasajero()" class="button-34 black">
+                  Agregar
+                </button>
               </div>
 
-        </div>
 
-
-        <!-- <div class="row pasajero-usuario">
-            <div class="mb-2 row">
-                <h4 class="col-sm-2 col-form-label">Pasajero</h4>
             </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-12">
 
-            <div class="mb-2 row">
-                <label class="col-sm-4 col-form-label">Identificación</label>
-                <div class="col-sm-8">
-                    <input type="number" name="" class="form-control" placeholder="Ingresa tu identificacion">
+                  <ul class="list-group">
+                    <li class="list-group-item" formArrayName="pasajeros"
+                      *ngFor="let product of pasajerosDeGrupos.controls; let i = index;" style="margin-bottom: 20px;">
+                      <div [formGroupName]="i" class="row">
+                        <div class="mb-2 row">
+                          <h4 class="col-sm-10 col-form-label">Pasajero {{i}}</h4>
+                          <h4 class="col-sm-2"><button (click)="eliminarPasajero(i,product)"
+                              class="button-34 red">Eliminar</button></h4>
+                        </div>
+
+                        <div class="mb-2 row">
+                          <label class="col-sm-4 col-form-label">Identificación</label>
+                          <div class="col-sm-8">
+                            <input type="number" formControlName="idPersona" name="" class="form-control"
+                              placeholder="Ingresa tu identificacion" required>
+                          </div>
+                        </div>
+
+                        <div class="mb-2 row">
+                          <label class="col-sm-4 col-form-label">Tipo de id</label>
+                          <div class="col-sm-8">
+                            <select value="" class="form-select" formControlName="idTipo" required>
+                              <option name="" id="" *ngFor="let id of tipoId" value="{{id.idTipo}}">{{id.tipo}}</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="mb-2 row">
+                          <label class="col-sm-4 col-form-label">Nombre</label>
+                          <div class="col-sm-8">
+                            <input type="text" name="" formControlName="nombre" required class="form-control"
+                              placeholder="Ingresa tu nombre">
+                          </div>
+                        </div>
+
+                        <div class="mb-2 row">
+                          <label class="col-sm-4 col-form-label">Apellidos</label>
+                          <div class="col-sm-8">
+                            <input type="text" formControlName="apellido" required class="form-control"
+                              placeholder="Ingresa tus apellidos">
+                          </div>
+                        </div>
+
+                        <div class="mb-2 row">
+                          <label class="col-sm-4 col-form-label">Sexo</label>
+                          <div class="col-sm-8">
+                            <input type="email" formControlName="sexo" required class="form-control"
+                              placeholder="Ingresa tu documento">
+                          </div>
+                        </div>
+
+                        <div class="mb-2 row">
+                          <label class="col-sm-4 col-form-label">Fecha nacimiento</label>
+                          <div class="col-sm-8">
+                            <input type="date" formControlName="fechaNac" required class="form-control">
+                          </div>
+                        </div>
+
+                        <div class="mb-2 row">
+                          <label class="col-sm-4 col-form-label">Celular</label>
+                          <div class="col-sm-8">
+                            <input type="number" formControlName="cel" class="form-control">
+                          </div>
+                        </div>
+
+                        <div class="mb-2 row">
+                          <label class="col-sm-4 col-form-label">Correo</label>
+                          <div class="col-sm-8">
+                            <input type="email" formControlName="correo" class="form-control"
+                              style="margin-bottom: 10px;">
+                          </div>
+                        </div>
+
+                      </div>
+                    </li>
+                  </ul>
                 </div>
+              </div>
             </div>
+          </div>
+          <button type="submit" (click)="createpagosInfo()" class="mt-20 w-100 btn-lg button-34" type="button">Guardar
+            datos</button>
+        </form>
+      </div>
+    </div>
 
-            <div class="mb-2 row">
-                <label class="col-sm-4 col-form-label">Tipo de id</label>
-                <div class="col-sm-8">
-                    <select value="" class="form-select">
-                        <option name="" id="" *ngFor="let id of tipoId" value="{{id.idTipo}}">{{id.tipo}}</option>
-                    </select>
-                </div>
-            </div>
+  </div>
 
-            <div class="mb-2 row">
-                <label class="col-sm-4 col-form-label">Nombre</label>
-                <div class="col-sm-8">
-                    <input type="text" name="" class="form-control" placeholder="Ingresa tu nombre">
-                </div>
-            </div>
+  <div>
+  </div>
+</div>
+<!-- Pagina 2 -->
+<div class="glass form-pagos" *ngIf="infoPagina==2">
+  <div class="row">
+    <div class="mb-2 row">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Costo total</th>
+          </tr>
+        </thead>
 
-            <div class="mb-2 row">
-                <label class="col-sm-4 col-form-label">Apellidos</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" placeholder="Ingresa tus apellidos">
-                </div>
-            </div>
-            <div class="mb-2 row">
-                <label class="col-sm-4 col-form-label">Documento</label>
-                <div class="col-sm-8">
-                    <input type="email" class="form-control" placeholder="Ingresa tu documento">
-                </div>
-            </div>
-            <div class="mb-2 row">
-                <label class="col-sm-4 col-form-label">Sexo</label>
-                <div class="col-sm-8">
-                    <input type="email" class="form-control" placeholder="Ingresa tu documento">
-                </div>
-            </div>
+        <tr>
+          <td><b>Costo:</b>{{tourSeleccionado.paquete.precio}} $ X Paquete</td>
+        </tr>
 
-            <div class="mb-2 row">
-                <label class="col-sm-4 col-form-label">Fecha nacimiento</label>
-                <div class="col-sm-8">
-                    <input type="date" class="form-control">
-                </div>
-            </div>
+        <tr>
+          <td><b>|{{pasajerosClasificados[0].cantidad}}|</b> 0 a 4 años= {{pasajerosClasificados[0].precio}}</td>
+        </tr>
 
-            <div class="mb-2 row">
-                <label class="col-sm-4 col-form-label">Celular</label>
-                <div class="col-sm-8">
-                    <input type="number" class="form-control">
-                </div>
-            </div>
+        <tr>
+          <td><b>|{{pasajerosClasificados[1].cantidad}}|</b> Niño(s) = {{pasajerosClasificados[1].precio}}</td>
+        </tr>
 
-            <div class="mb-2 row">
-                <label class="col-sm-4 col-form-label">Correo</label>
-                <div class="col-sm-8">
-                    <input type="email" class="form-control" style="margin-bottom: 10px;">
-                </div>
-            </div>
+        <tr>
+          <td><b>|{{pasajerosClasificados[2].cantidad}}|</b> Adulto(s) = {{pasajerosClasificados[2].precio}}</td>
+        </tr>
 
-            <input type="hidden" value="1" class="form-control">
+        <hr>
 
-        </div> -->
+        <tr>
+          <td><b>Total a pagar:</b> {{pasajerosClasificados[3].total}}</td>
+        </tr>
 
+      </table>
+    </div>
+    <button (click)="infoPagina=3" class="mt-20 w-100 btn-lg button-34" type="button">Volver</button>
+  </div>
+</div>
+
+<!-- Pagina 3 -->
+<div class="glass form-pagos" *ngIf="infoPagina==3">
+  <div class="row">
+    <div class="mb-2 row">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Resumen de la compra</th>
+          </tr>
+        </thead>
+        <tr>
+          <td><b>Referencia de pago:</b> {{idCompra}}</td>
+        </tr>
+        <tr>
+          <td><b>Descripción:</b> Paquete {{idPaquete}}</td>
+        </tr>
+      </table>
+    </div>
+    <button (click)="infoPagina=1" class="mt-20 w-100 btn-lg button-34" type="button">Volver</button>
+  </div>
 </div>
 
 <app-footer></app-footer>

@@ -2,18 +2,22 @@
 <div class="row" style="margin: 60px;">
 
   <h1 style="color:aliceblue">Paquetes disponibles</h1>
-    <div *ngFor="let paquete of paquetes" class="col-lg-4 col-xs-2">
+    <div *ngFor="let tour of tours" class="col-lg-4 col-xs-2">
       
         <div class="card paquete glass" style="width: 18rem;">
             <div class="card-body">
          
               <h5 class="card-title">Paquete</h5>
-              <p class="card-text">{{paquete.nombre}}</p>
-              <li class="card-text">{{paquete.recomendacion}}</li>
-                <p class="card-text">Precio:{{paquete.precio}}</p>
-              <img class="img-paquete" src={{paquete.urlImagen}} alt="">
+              <p class="card-text">{{tour.paquete.nombre}}</p>
+              <li class="card-text">{{tour.paquete.recomendacion}}</li>
+                <p class="card-text">Precio:{{tour.paquete.precio}}</p>
+              <img class="img-paquete" src={{tour.paquete.urlImagen}} alt="">
+              <p class="card-text"><b>Fecha Salida:</b> {{tour.fechaSalida}}</p>
+
+              <p class="card-text"><b>Fecha llegada:</b> {{tour.fechaLlegada}}</p>
+
               <br>
-              <a href="http://localhost:4200/pagos/{{paquete.idPaq}}" class="btn boton-compra">Comprar</a>
+              <a routerLink="/pagos/{{tour.paquete.idPaq}}" class="btn boton-compra">Comprar</a>
             </div>
         </div>
         
