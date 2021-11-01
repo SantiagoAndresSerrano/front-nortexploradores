@@ -1,3 +1,4 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,6 +8,7 @@ import { TipoidService } from 'src/app/services/tipoid.service';
 import { TokenService } from 'src/app/services/token.service';
 import { TourService } from 'src/app/services/tour.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
+import * as crypto from "crypto-js";
 
 @Component({
   selector: 'app-form-pagos',
@@ -16,10 +18,12 @@ export class FormPagosComponent implements OnInit {
   pagosInfo! : FormGroup;
   public paquetes:any = [];
   public tours: any= [];
+  public persona:any
   public tourSeleccionado:any;
   public cuposDisponibles:any;
 
   public total = 0;
+  public totalCompra =0
   public pasajerosFrec: any=[];
   public tipoId :any= [];
   public pasajerosFrecElegidos : any = [];
@@ -36,9 +40,36 @@ export class FormPagosComponent implements OnInit {
 
   // Info page pago 2
   public infoPagina = 1;
-  public idCompra!:string;
+  public idCompra=this.generarReferencia();
 
   public costoUnit!:number;
+
+  //payu variables
+
+  referenciaUnic = this.generarReferencia();
+  iva = 0.19;
+  moneda = "COP";
+  apikey = "jR9INc85abuxxkcn1Xn1hqZe5P";
+ 
+  idCuenta = "957106";
+   idMercado = "949518";
+
+  email = ""
+  nombrePersona = "";
+  idUsuario = "";
+  descripcion="";
+
+  url = `https://nortexploradores.herokuapp.com/pagos/confirmacion`;
+  
+  firmaElectronica!:string
+  firmaElectronicaMD5!:string
+
+// test =================================================================
+  idCuentaTest = "512321";
+  apikeyTest= "4Vj8eK4rloUd272L48hsrarnUA";
+
+  firmaElectronicaTest = `${this.apikeyTest}~508029~${this.referenciaUnic}~${this.total}~${this.moneda}`;
+  firmaElectronicaMD5Test = crypto.MD5(this.firmaElectronicaTest).toString();
   
 
   constructor(
@@ -60,6 +91,7 @@ export class FormPagosComponent implements OnInit {
     this.listarTour();
     this.generarReferencia();
     this.cargarPasajerosClasificados()
+    this.referenciaUnic = this.generarReferencia()
     if(this.idPaquete ==null) this.idPaquete="paq-1";
     this.idPaquete = this.route.snapshot.paramMap.get("idPaq");
 
@@ -109,7 +141,7 @@ export class FormPagosComponent implements OnInit {
         this.pasajerosClasificados[3].cantidad-=1;
 
       if(this.pasajerosClasificados[0].precio>0)
-        this.pasajerosClasificados[0].precio-=valorPaquete;
+        this.pasajerosClasificados[0].precio=10000;
         this.pasajerosClasificados[3].precio-=this.pasajerosClasificados[0].precio;
 
     }
@@ -121,7 +153,7 @@ export class FormPagosComponent implements OnInit {
       }
         
       if(this.pasajerosClasificados[1].precio>0){
-        this.pasajerosClasificados[1].precio-=(valorPaquete-(valorPaquete*0.2)); //por confirmar
+        this.pasajerosClasificados[1].precio-=(valorPaquete-10000); //por confirmar
         this.pasajerosClasificados[3].precio-=this.pasajerosClasificados[1].precio;
       }
     }
@@ -147,24 +179,44 @@ export class FormPagosComponent implements OnInit {
 
   createpagosInfo(){
     console.log('data is ', this.pagosInfo.value.pasajeros);
+    let datosIncorrectos:Boolean = false;
 
     let personas = this.pagosInfo.value.pasajeros;
     let pasajeros = [];
-    for (let i = 0; i < personas.length; i++) {
+
+    if(this.tourSeleccionado ==undefined){
+      datosIncorrectos=true
+    }
+
+    for (let i = 0; i < personas.length && datosIncorrectos==false; i++) {
         let pasajero =personas[i];
+        let idPerson = pasajero.idPersona;
+        let nombre  = pasajero.nombre;
+        let sexo = pasajero.sexo;
+        let fechaNac = pasajero.fechaNac;
+        let cel = pasajero.cel;
+        let correo = pasajero.correo;
+
+        if(pasajero =='' || idPerson =='' || nombre =='' || fechaNac=='' || cel =='' || correo ==''){
+          datosIncorrectos =true;
+          break;
+        }
+
+
         let fechaNacPasajero = pasajero.fechaNac;
         let edadPasajero = this.calcularfecha(fechaNacPasajero);
         let valorPaquete = parseInt(this.tourSeleccionado.paquete.precio+"");
 
         if(edadPasajero<=4){
           this.pasajerosClasificados[0].cantidad+=1;
-          this.pasajerosClasificados[0].precio=0;
+          this.pasajerosClasificados[0].precio=10000;
+          this.totalCompra+=10000
         }
 
         if(edadPasajero>4 && edadPasajero<13){
           this.pasajerosClasificados[1].cantidad+=1;
-          this.pasajerosClasificados[1].precio+=(valorPaquete-(valorPaquete*0.2));
-          this.pasajerosClasificados[3].precio+=this.pasajerosClasificados[1].precio;
+          this.pasajerosClasificados[1].precio+=(valorPaquete-10000);
+          this.totalCompra+=(valorPaquete-10000);
           this.pasajerosClasificados[3].cantidad+=1;
           
         }
@@ -172,11 +224,11 @@ export class FormPagosComponent implements OnInit {
         if(edadPasajero>12){
           this.pasajerosClasificados[2].cantidad+=1;
           this.pasajerosClasificados[2].precio+=valorPaquete;
-          this.pasajerosClasificados[3].precio+=this.pasajerosClasificados[2].precio;
+          this.totalCompra+=(valorPaquete);
           this.pasajerosClasificados[3].cantidad+=1;
         }
 
-        console.log(this.pasajerosClasificados);
+
         var pasajeroPost = {
           "esCotizante":false,
           "persona":pasajero,
@@ -184,16 +236,20 @@ export class FormPagosComponent implements OnInit {
         }
         pasajeros.push(pasajeroPost)
     }
+    const output = document.getElementById("errorPresentado");
+    if(datosIncorrectos==true){
+      if (output) output.innerHTML = "Campos mal puestos!";
+      return;
 
-    // this.usuarioService.guardarPasajerosDeUsuario(this.usuario.id_Usuario,pasajeros).subscribe(pasajeros=>{
-    //   console.log(pasajeros);
-    // });
-    
-    console.log(this.pasajerosClasificados);
-
-    var compra = {
-      id_compra:12
+    }else{
+      if (output) output.innerHTML = "";
     }
+
+    // Guardo los pasajeros asociados al usuario -->
+    this.usuarioService.guardarPasajerosDeUsuario(this.usuario.id_Usuario,pasajeros).subscribe(pasajeros=>{
+      console.log(pasajeros);
+    });
+    
     //Primero tengo que guardar los detalles compra.
     //Tengo que enviar el tour por ID /compraReservada/{idtour}
     
@@ -207,6 +263,7 @@ export class FormPagosComponent implements OnInit {
 
 
   cargarPasajerosClasificados(){
+    this.pasajerosClasificados=[]
     for (let i = 0; i < 4; i++) {
 
       if(i==3){
@@ -253,10 +310,49 @@ export class FormPagosComponent implements OnInit {
 
   public agregarPasajerosFrec(){
     this.usuarioService.clientesPorUsuario(this.usuario.id_Usuario).subscribe(pasajeros=>{
-      this.pasajerosFrec = pasajeros; 
+      this.cargarPasajeros(pasajeros)
     })
+
+
   }
 
+  public cargarPasajeros(pasajeros:any){
+    for (let i = 0; i < pasajeros.length; i++) {
+      let pasajero = pasajeros[i]
+      if(pasajero.esCotizante==false){
+        this.pasajerosFrec.push(pasajero)
+      }else{
+        this.persona = pasajeros[i].persona
+
+        let output = document.getElementById('identificacioncot');
+         if (output) output.setAttribute('value',this.persona.idPersona);
+
+         output = document.getElementById('tipoIdcot');
+         if (output) output.setAttribute('value',this.persona.idTipo.tipo);
+
+         output = document.getElementById('nombrecot');
+         if (output) output.setAttribute('value',this.persona.nombre);
+
+         output = document.getElementById('apellidocot');
+         if (output) output.setAttribute('value',this.persona.apellido);
+
+         output = document.getElementById('sexocot');
+         if (output) output.setAttribute('value',this.persona.sexo);
+
+         output = document.getElementById('fechaNaccot');
+         if (output) output.setAttribute('value',this.persona.fechaNac);
+
+         output = document.getElementById('celcot');
+         if (output) output.setAttribute('value',this.persona.cel);
+         
+         output = document.getElementById('correocot');
+         if (output) output.setAttribute('value',this.persona.correo);
+
+         this.total++;
+
+      }       
+  }
+  }  
   public actualizarPasajeros(event:any){ //metodo para agregar un pasajero o eliminarlo si se vuelve a seleccionar
     let pasajeros = this.pagosInfo.get('pasajeros') as FormArray;
     
@@ -309,9 +405,9 @@ cargarTour(event:any){
   })
 }
 
-generarReferencia(){
+generarReferencia():string{
   const fecha = new Date();
-  this.idCompra = Math.round((Math.random()*8344))+""+Math.round(fecha.getMilliseconds());
+  return Math.round((Math.random()*45644))+""+Math.round(fecha.getMilliseconds());
 }
 
 
@@ -329,7 +425,24 @@ calcularfecha (birthDate:any) {
   return years;
 }
 
+volverPag(){
+  this.cargarPasajerosClasificados()
+  this.infoPagina=1
+  this.totalCompra=0
+}
+cargarPayu(){
+  this.infoPagina=3
+  this.idUsuario = this.usuario.id_Usuario
+  this.email = this.usuario.username
+  
+  let pasajeros = this.pagosInfo.get('pasajeros') as FormArray;
+  this.descripcion = "Pago de ("+pasajeros.length+") paquete(s) turistico(s) destino: "+this.tourSeleccionado.ruta.municipio.nombre
 
+  this.firmaElectronica = `${this.apikey}~${this.idMercado}~${this.idCompra}~${this.totalCompra}~${this.moneda}`;
+  this.firmaElectronicaMD5 = crypto.MD5(this.firmaElectronica).toString();
+  
+
+}
 
 }
 
