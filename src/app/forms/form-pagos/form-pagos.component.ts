@@ -56,6 +56,7 @@ export class FormPagosComponent implements OnInit {
 
   email = ""
   nombrePersona = "";
+
   idUsuario = "";
   descripcion="";
 
@@ -129,7 +130,8 @@ export class FormPagosComponent implements OnInit {
 
   eliminarPasajero(i:number, pasajero:any){
     let pasajeros = this.pagosInfo.get('pasajeros') as FormArray;
-    this.total--;
+    if(this.total>0)
+      this.total--;
     let fechaNacPasajero = pasajero.fechaNac;
 
     let edadPasajero = this.calcularfecha(fechaNacPasajero);
@@ -311,6 +313,7 @@ export class FormPagosComponent implements OnInit {
   public agregarPasajerosFrec(){
     this.usuarioService.clientesPorUsuario(this.usuario.id_Usuario).subscribe(pasajeros=>{
       this.cargarPasajeros(pasajeros)
+      console.log(pasajeros);
     })
 
 
@@ -323,34 +326,24 @@ export class FormPagosComponent implements OnInit {
         this.pasajerosFrec.push(pasajero)
       }else{
         this.persona = pasajeros[i].persona
+        this.total++;
+        let pasajeroX = this.pagosInfo.get('pasajeros') as FormArray;
+        
+        pasajeroX.push(this.formBuilder.group({
+          idTipo : [this.persona.idTipo.idTipo, [Validators.required]],
+          idPersona : [this.persona.idPersona, [Validators.required]],
+          nombre : [this.persona.nombre, [Validators.required]],
+          apellido : [this.persona.apellido, [Validators.required]],
+          sexo : [this.persona.sexo, [Validators.required]],
+          fechaNac : [this.persona.fechaNac, [Validators.required]],
+          cel : [this.persona.cel, [Validators.required]],
+          correo : [this.persona.correo, [Validators.required]],
+        }));
 
-        let output = document.getElementById('identificacioncot');
-         if (output) output.setAttribute('value',this.persona.idPersona);
-
-         output = document.getElementById('tipoIdcot');
-         if (output) output.setAttribute('value',this.persona.idTipo.tipo);
-
-         output = document.getElementById('nombrecot');
-         if (output) output.setAttribute('value',this.persona.nombre);
-
-         output = document.getElementById('apellidocot');
-         if (output) output.setAttribute('value',this.persona.apellido);
-
-         output = document.getElementById('sexocot');
-         if (output) output.setAttribute('value',this.persona.sexo);
-
-         output = document.getElementById('fechaNaccot');
-         if (output) output.setAttribute('value',this.persona.fechaNac);
-
-         output = document.getElementById('celcot');
-         if (output) output.setAttribute('value',this.persona.cel);
          
-         output = document.getElementById('correocot');
-         if (output) output.setAttribute('value',this.persona.correo);
-
-         this.total++;
-
-      }       
+      }    
+      
+   
   }
   }  
   public actualizarPasajeros(event:any){ //metodo para agregar un pasajero o eliminarlo si se vuelve a seleccionar
@@ -370,7 +363,8 @@ export class FormPagosComponent implements OnInit {
     
     if(yaResgistrado){
       pasajeros.removeAt(posEliminar);
-      this.total--;
+      if(this.total>0)
+        this.total--;
     }else{
       //busco a la persona y cargo sus datos en el form.
       this.total++;
@@ -430,10 +424,13 @@ volverPag(){
   this.infoPagina=1
   this.totalCompra=0
 }
+
 cargarPayu(){
   this.infoPagina=3
+  this.totalCompra=this.totalCompra-this.totalCompra*0.5
   this.idUsuario = this.usuario.id_Usuario
-  this.email = this.usuario.username
+  this.email = this.persona.correo
+  this.nombrePersona= this.persona.nombre +" "+this.persona.apellido
   
   let pasajeros = this.pagosInfo.get('pasajeros') as FormArray;
   this.descripcion = "Pago de ("+pasajeros.length+") paquete(s) turistico(s) destino: "+this.tourSeleccionado.ruta.municipio.nombre
@@ -442,6 +439,12 @@ cargarPayu(){
   this.firmaElectronicaMD5 = crypto.MD5(this.firmaElectronica).toString();
   
 
+}
+
+guardarCompra(form:HTMLFormElement){
+  // toda la logica de guardar compra, recordar hacer el form.sumit dentro de la respuesta de la peticion de guardar
+  // guardar los pasajeros asociados a la compra
+  form.submit();
 }
 
 }
